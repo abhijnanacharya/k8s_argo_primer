@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hello-spring-dev
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    # TODO: Replace with your GitHub repo URL after pushing
+    repoURL: https://github.com/YOUR_USERNAME/YOUR_GITOPS_REPO.git
+    targetRevision: main
+    # Points ArgoCD at the dev overlay — kustomize is auto-detected
+    path: gitops/overlays/dev
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: hello-dev
+
+  syncPolicy:
+    automated:
+      prune: true       # delete resources removed from git
+      selfHeal: true    # revert manual kubectl changes
+    syncOptions:
+      - CreateNamespace=true   # auto-creates hello-dev namespace

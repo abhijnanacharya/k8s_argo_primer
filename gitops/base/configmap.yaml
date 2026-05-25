@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hello-spring-config
+data:
+  environment: base
+  message: "Hello from Spring Boot!"

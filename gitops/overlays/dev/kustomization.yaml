@@ -1,0 +1,38 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: hello-dev
+
+resources:
+  - ../../base
+
+# Override the image tag — update this when you build a new image
+images:
+  - name: hello-spring
+    newTag: "0.0.1"
+
+# Patch the ConfigMap values for dev
+patches:
+  - target:
+      kind: ConfigMap
+      name: hello-spring-config
+    patch: |-
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: hello-spring-config
+      data:
+        environment: dev
+        message: "Hello from Dev!"
+
+# Patch replica count for dev (keep it light)
+  - target:
+      kind: Deployment
+      name: hello-spring
+    patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: hello-spring
+      spec:
+        replicas: 1

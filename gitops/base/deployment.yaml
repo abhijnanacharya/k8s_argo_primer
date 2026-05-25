@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-spring
+  labels:
+    app: hello-spring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-spring
+  template:
+    metadata:
+      labels:
+        app: hello-spring
+    spec:
+      containers:
+        - name: hello-spring
+          image: hello-spring:0.0.1   # overridden per overlay
+          ports:
+            - containerPort: 8080
+          env:
+            - name: APP_ENVIRONMENT
+              valueFrom:
+                configMapKeyRef:
+                  name: hello-spring-config
+                  key: environment
+            - name: APP_MESSAGE
+              valueFrom:
+                configMapKeyRef:
+                  name: hello-spring-config
+                  key: message
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 10

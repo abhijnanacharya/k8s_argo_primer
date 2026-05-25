@@ -1,0 +1,29 @@
+# Gradle
+.gradle/
+build/
+out/
+*.class
+*.jar
+*.war
+
+# Spring Boot
+spring-pid
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+*.log
+
+# Kubernetes / Kustomize
+# (keep all yaml tracked — don't ignore anything in gitops/)
