@@ -23,9 +23,9 @@ patches:
         name: hello-spring-config
       data:
         environment: dev
-        message: "Hello from Dev!"
+        message: "Hello from GitOps!!! "
 
-# Patch replica count for dev (keep it light)
+  # Patch replica count for dev (keep it light)
   - target:
       kind: Deployment
       name: hello-spring
@@ -35,4 +35,4 @@ patches:
       metadata:
         name: hello-spring
       spec:
-        replicas: 1
+        replicas: 2

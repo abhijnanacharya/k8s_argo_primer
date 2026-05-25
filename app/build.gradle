@@ -19,15 +19,3 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
-
-// Configures bootBuildImage to produce an image loadable into Docker Desktop's k8s
-tasks.named('bootBuildImage') {
-    imageName = "hello-spring:${version}"
-    // Targets linux/amd64 — required for Docker Desktop's k8s node
-    environment = ['BP_JVM_VERSION': '21', 'BP_NATIVE_IMAGE': 'false']
-    docker {
-        publishRegistry {
-            // No push needed for local — image lands in Docker daemon shared with k8s
-        }
-    }
-}
