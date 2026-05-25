@@ -11,8 +11,8 @@ images:
   - name: hello-spring
     newTag: "0.0.1"
 
-# Patch the ConfigMap values for dev
 patches:
+  # Patch the ConfigMap values for dev
   - target:
       kind: ConfigMap
       name: hello-spring-config
@@ -23,9 +23,9 @@ patches:
         name: hello-spring-config
       data:
         environment: dev
-        message: "Hello from GitOps!!! "
+        message: "Hello from GitOps!!!"
 
-  # Patch replica count for dev (keep it light)
+  # Patch replica count + restart annotation for dev
   - target:
       kind: Deployment
       name: hello-spring
@@ -36,3 +36,7 @@ patches:
         name: hello-spring
       spec:
         replicas: 2
+        template:
+          metadata:
+            annotations:
+              kubectl.kubernetes.io/restartedAt: "2026-05-25T13:00:00Z"

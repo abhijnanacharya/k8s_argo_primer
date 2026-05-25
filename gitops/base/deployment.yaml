@@ -4,6 +4,8 @@ metadata:
   name: hello-spring
   labels:
     app: hello-spring
+  annotations:
+    kubectl.kubernetes.io/restartedAt: "2024-01-01T00:00:00Z
 spec:
   replicas: 1
   selector:
