@@ -18,13 +18,20 @@ public class HelloController {
     @GetMapping("/")
     public Map<String, String> hello() {
         return Map.of(
-            "message", message,
-            "environment", environment
-        );
+                "message", message,
+                "environment", environment);
     }
 
     @GetMapping("/health")
     public Map<String, String> health() {
         return Map.of("status", "UP");
+    }
+
+    @GetMapping("/info")
+    public Map<String, String> info() {
+        return Map.of(
+                "app", "hello-spring",
+                "version", "0.0.2",
+                "environment", environment);
     }
 }
