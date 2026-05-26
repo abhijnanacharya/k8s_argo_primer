@@ -5,7 +5,7 @@ metadata:
   labels:
     app: hello-spring
   annotations:
-    kubectl.kubernetes.io/restartedAt: "2024-01-01T00:00:00Z
+    kubectl.kubernetes.io/restartedAt: "2024-01-01T00:00:00Z"
 spec:
   replicas: 1
   selector:
@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: hello-spring
-          image: hello-spring:0.0.1   # overridden per overlay
+          image: hello-spring:0.0.1 # overridden per overlay
           ports:
             - containerPort: 8080
           env:
