@@ -37,3 +37,23 @@ patches:
           metadata:
             annotations:
               kubectl.kubernetes.io/restartedAt: "2026-05-25T17:00:00Z"
+  - target:
+      kind: Ingress
+      name: hello-spring
+    patch: |-
+      apiVersion: networking.k8s.io/v1
+      kind: Ingress
+      metadata:
+        name: hello-spring
+      spec:
+        rules:
+          - host: hello-spring-prod.test
+            http:
+              paths:
+                - path: /
+                  pathType: Prefix
+                  backend:
+                    service:
+                      name: hello-spring
+                      port:
+                        number: 80
