@@ -33,3 +33,7 @@ patches:
         name: hello-spring
       spec:
         replicas: 2
+        template:
+          metadata:
+            annotations:
+              kubectl.kubernetes.io/restartedAt: "2026-05-25T17:00:00Z"
