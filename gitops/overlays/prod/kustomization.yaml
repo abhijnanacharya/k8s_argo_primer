@@ -8,7 +8,7 @@ resources:
 
 images:
   - name: hello-spring
-    newTag: "0.0.1"
+    newTag: "0.0.2"
 
 patches:
   - target:
@@ -36,7 +36,7 @@ patches:
         template:
           metadata:
             annotations:
-              kubectl.kubernetes.io/restartedAt: "2026-05-25T17:00:00Z"
+              kubectl.kubernetes.io/restartedAt: "2026-05-25T18:35:00Z"
   - target:
       kind: Ingress
       name: hello-spring
