@@ -31,7 +31,7 @@ public class HelloController {
     public Map<String, String> info() {
         return Map.of(
                 "app", "hello-spring",
-                "version", "0.0.2",
+                "version", "0.0.3",
                 "environment", environment);
     }
 }
