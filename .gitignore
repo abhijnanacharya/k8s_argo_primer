@@ -6,6 +6,7 @@ out/
 *.jar
 *.war
 
+!gradle/wrapper/gradle-wrapper.jar
 # Spring Boot
 spring-pid
 
