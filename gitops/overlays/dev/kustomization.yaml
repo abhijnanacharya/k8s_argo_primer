@@ -9,7 +9,7 @@ resources:
 # Override the image tag — update this when you build a new image
 images:
   - name: ghcr.io/abhijnanacharya/hello-spring
-    newTag: "latest"
+    newTag: "fd8a4929b72c638796c617e458ffb9283b70021d"
 
 patches:
   # Patch the ConfigMap values for dev
@@ -39,4 +39,4 @@ patches:
         template:
           metadata:
             annotations:
-              kubectl.kubernetes.io/restartedAt: "2026-05-25T17:30:00Z"
+              kubectl.kubernetes.io/restartedAt: "2026-05-28T08:43:03Z"
