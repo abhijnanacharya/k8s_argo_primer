@@ -1,0 +1,86 @@
+name: Update Overlay
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "app/**"
+
+jobs:
+  update-dev:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update dev overlay image tag
+        run: |
+          SHA=${{ github.sha }}
+          SHORT_SHA=${SHA::7}
+
+          # Update the image tag in dev overlay
+          sed -i "s|newTag:.*|newTag: \"${SHA}\"|g" gitops/overlays/dev/kustomization.yaml
+
+          # Bump the restartedAt timestamp
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          sed -i "s|restartedAt:.*|restartedAt: \"${TIMESTAMP}\"|" gitops/overlays/dev/kustomization.yaml
+
+      - name: Raise PR for dev overlay (auto-merge)
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "deploy hello-spring:${{ github.sha }} to dev"
+          title: "[dev] deploy hello-spring:${{ github.sha }}"
+          body: |
+            Automated overlay update for dev.
+            - Image: `ghcr.io/abhijnanacharya/hello-spring:${{ github.sha }}`
+            - Triggered by: ${{ github.sha }}
+          branch: "deploy/dev-${{ github.sha }}"
+          base: main
+          labels: dev-deploy
+          auto-merge: true # Option A — auto merges after checks pass
+
+  update-prod:
+    runs-on: ubuntu-latest
+    needs: update-dev # only runs after dev job succeeds
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update prod overlay image tag
+        run: |
+          SHA=${{ github.sha }}
+
+          sed -i "s|newTag:.*|newTag: \"${SHA}\"|g" gitops/overlays/prod/kustomization.yaml
+
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          sed -i "s|restartedAt:.*|restartedAt: \"${TIMESTAMP}\"|" gitops/overlays/prod/kustomization.yaml
+
+      - name: Raise PR for prod overlay (manual merge)
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "deploy hello-spring:${{ github.sha }} to prod"
+          title: "[prod] deploy hello-spring:${{ github.sha }}"
+          body: |
+            ## Prod Promotion
+            - Image: `ghcr.io/abhijnanacharya/hello-spring:${{ github.sha }}`
+            - Dev deployed: ✅
+
+            **Review and merge manually to promote to prod.**
+          branch: "deploy/prod-${{ github.sha }}"
+          base: main
+          labels: prod-deploy
+          # No auto-merge — Option B, human merges this one
