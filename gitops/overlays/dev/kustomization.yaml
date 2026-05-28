@@ -8,8 +8,8 @@ resources:
 
 # Override the image tag — update this when you build a new image
 images:
-  - name: hello-spring
-    newTag: "0.0.2"
+  - name: ghcr.io/abhijnanacharya/hello-spring
+    newTag: "latest"
 
 patches:
   # Patch the ConfigMap values for dev

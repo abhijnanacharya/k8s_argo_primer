@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: hello-spring
-          image: hello-spring:0.0.1 # overridden per overlay
+          image: ghcr.io/abhijnanacharya/hello-spring:latest
           ports:
             - containerPort: 8080
           env:

@@ -7,8 +7,8 @@ resources:
   - ../../base
 
 images:
-  - name: hello-spring
-    newTag: "0.0.2"
+  - name: ghcr.io/abhijnanacharya/hello-spring
+    newTag: "latest"
 
 patches:
   - target:
