@@ -6,20 +6,22 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build-and-push:
-    runs-on: arc-runner-set
-
+    runs-on: ubuntu-latest # GitHub's runner — has Docker
     permissions:
       contents: read
-      packages: write # needed to push to ghcr.io
+      packages: write
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       - name: Set up Java 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v4.7.0
         with:
           java-version: "21"
           distribution: "temurin"
@@ -43,3 +45,17 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository_owner }}/hello-spring:${{ github.sha }}
             ghcr.io/${{ github.repository_owner }}/hello-spring:latest
+
+  verify-cluster:
+    runs-on: arc-runner-set # self-hosted — has kubectl access
+    needs: build-and-push
+    if: github.event_name != 'pull_request'
+
+    steps:
+      - name: Verify kubectl works
+        run: kubectl get pods -n hello-dev
+
+      - name: Check current dev image
+        run: |
+          kubectl get deployment hello-spring -n hello-dev \
+            -o jsonpath='{.spec.template.spec.containers[0].image}'
